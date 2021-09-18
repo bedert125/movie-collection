@@ -30,7 +30,8 @@ class ConnectionDB {
     "BR": 2,
     "4K": 3,
     "3D": 4,
-    "VHS": 5
+    "VHS": 5,
+    "DIGITAL": 5
   };
 
   // static const Map<int, String> FORMAT_KEYS = {1:"DVD",2: "BR", 3: "4K"};
