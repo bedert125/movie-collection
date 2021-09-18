@@ -1,7 +1,7 @@
 import 'dart:ui';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'file:///D:/Git/movie_collection/lib/conf/styles.dart';
+import 'conf/styles.dart';
 
 class DialogBox extends StatefulWidget {
   final String title, descriptions, text;
