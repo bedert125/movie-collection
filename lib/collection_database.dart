@@ -541,16 +541,24 @@ class tableItems {
 
       var translated = await Request.getTranslatedData(imdb);
       print("translated $translated");
-      if(translated["plotShort"]["plainText"] == null){
+      var plot = translated["plotShort"]["plainText"];
+      if(plot == ""){
+        plot = null;
+      }
+      if(plot == null){
         print("Error :( getTranslatedData not exist");
-        assert(translated["plotShort"]["plainText"] != null);
+        assert(plot != null);
       }
       var title = translated["titleInLanguage"] ?? translated["title"];
+
+      if(title == ""){
+        plot = null;
+      }
       if(title == null){
         print("Error :( getTranslatedData not exist");
         assert(title != null);
       }
-      await translation.insert(itemId, title, translated["plotShort"]["plainText"],translated["url"], lang);
+      await translation.insert(itemId, title, plot,translated["url"], lang);
       translatedData = await translation.get(itemId, lang);
 
       if(updateYear){
