@@ -5,6 +5,7 @@ import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:movie_collection/popup.dart';
+import 'package:movie_collection/utils/visualElements.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'dart:math' as math;
 
@@ -181,7 +182,8 @@ class _ItemViewState extends State<ItemView> {
     //dataChildren.add(langSelection);
 
     if(widget._item.year != null){
-      Widget yearLabel = Align(
+      Widget yearLabel = VisualElements.getYearLabel(widget._item.year, context);
+      /*Align(
         alignment: Alignment.topLeft,
         child: Container(
           //margin: EdgeInsets.only(bottom: 10.0),
@@ -204,7 +206,7 @@ class _ItemViewState extends State<ItemView> {
                 )),
           ),
         ),
-      );
+      );*/
       dataChildren.add(yearLabel);
     }
 

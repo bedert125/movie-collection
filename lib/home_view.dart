@@ -45,6 +45,7 @@ class _HomeViewState extends State<HomeView> with TickerProviderStateMixin {
   final List<DropdownItem> _sortItems = [
     DropdownItem(1, "By Added", "id asc"),
     DropdownItem(2, "By Name", "name asc"),
+    DropdownItem(2, "By Year", "IFNULL(year,99999) asc"),
     // error al agregar un nuevo que no esté en la ultima posicion de la BD
   ];
 

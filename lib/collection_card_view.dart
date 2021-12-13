@@ -2,6 +2,7 @@ import 'dart:ui';
 
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:movie_collection/utils/visualElements.dart';
 
 import 'collection_common_view.dart';
 import 'collection_database.dart';
@@ -71,7 +72,7 @@ class _CollectionCardViewState extends CollectionViewState {
             border: Border.all(width: 1,  color: borderColor)
 
           ),
-            padding: EdgeInsets.fromLTRB(10, Styles.paddingValue/5,0, Styles.paddingValue/5),
+          padding: EdgeInsets.fromLTRB(10, Styles.paddingValue/5,0, Styles.paddingValue/5),
 
           child: Column(
             children: item.formats.getIcons(size: "s"),
@@ -130,6 +131,11 @@ class _CollectionCardViewState extends CollectionViewState {
                     alignment: Alignment.topRight,
                     child: Container(
                         child: _getIcons(item))
+                ),
+                Align(
+                    alignment: Alignment.topLeft,
+                    child: Container(
+                        child: VisualElements.getYearLabel(item.year, context))
                 ),
                 Align(
                     alignment: Alignment.bottomCenter,

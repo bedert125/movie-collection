@@ -362,9 +362,10 @@ class tableItems {
       where =" WHERE ${ConnectionDB.TABLE_TRANSLATED}.name  COLLATE SQL_Latin1_General_CP1_CI_AI LIKE  \"%$search%\" ";
     }
 
-    String query = "SELECT id,name,${ConnectionDB.FK_LANG_ID} FROM ( "
+    String query = "SELECT id,year,name,${ConnectionDB.FK_LANG_ID} FROM ( "
         "SELECT "
         "${ConnectionDB.TABLE_ITEMS}.id, "
+        "${ConnectionDB.TABLE_ITEMS}.year, "
         "${ConnectionDB.TABLE_TRANSLATED}.name, "
         "CASE "
         "  WHEN ${ConnectionDB.FK_LANG_ID} = $_lang THEN 1 "
