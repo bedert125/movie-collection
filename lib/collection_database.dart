@@ -353,14 +353,16 @@ class tableItems {
   Future<int> insertNew(ItemData item) async {
     final Database db = await ConnectionDB._db;
 
+    // insert ITEM
     var itemId = await db.insert(
       ConnectionDB.TABLE_ITEMS,
       item.toDB(),
       conflictAlgorithm: ConflictAlgorithm.replace,
     );
-
+    // insert translation
     await translation.insert(item.id, item.name, item.description, "", 1); // English by defect
 
+    // insert format
     if (item.formats != null) {
       await formats.update(item);
     }
@@ -656,8 +658,13 @@ class tableItems {
     var current = item.formats.toDB(allValues:false);
     print("current Formats $current");
 
+    // delete format
     await formats.deleteByItem(item);
 
+    // delete trnaslation
+    await translation.deleteByItem(item);
+
+    // delete Item
     await db.delete(
       ConnectionDB.TABLE_ITEMS,
       where: "id = ?",
@@ -731,6 +738,16 @@ class tableTranslated {
     return await db.query(ConnectionDB.TABLE_TRANSLATED,
         where: where, whereArgs: whereArgs);
 
+  }
+
+  Future<void> deleteByItem(ItemData item) async {
+    final db = await ConnectionDB._db;
+    var deleted = await db.delete(
+      ConnectionDB.TABLE_TRANSLATED,
+      where:"${ConnectionDB.FK_ITEMS_ID} = ?",
+      whereArgs: [item.id],
+    );
+    print("Translations Deleted $deleted , itemID ${item.id}");
   }
 
 }

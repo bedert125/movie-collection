@@ -213,10 +213,16 @@ class _ActionButtonsState extends State<ActionButtons> {
 
   Future<List<dynamic>> _searchByNameIMDB(name) async {
     if (name == null) return null;
-    var urlMovieData = "https://imdb8.p.rapidapi.com/title/find?q=" + name;
-    print(">> imdb $urlMovieData");
+    //var urlMovieData = "https://imdb8.p.rapidapi.com/title/find?q=" + name;
+    var httpsUri = Uri(
+        scheme: 'https',
+        host: 'imdb8.p.rapidapi.com',
+        path: 'title/find',
+        queryParameters: {'q': name});
+
+    print(">> imdb $httpsUri");
     var response = await http.get(
-      urlMovieData,
+      httpsUri,
       headers: {
         "x-rapidapi-key": Config.IMDB_KEY,
         "x-rapidapi-host": "imdb8.p.rapidapi.com",
@@ -249,10 +255,19 @@ class _ActionButtonsState extends State<ActionButtons> {
 
   Future<List<dynamic>> _searchByNameOMBD(name) async {
     List<dynamic> resultAsList;
-    var urlMovieData = 'http://www.omdbapi.com/?plot=full&t=' +
+    /*var urlMovieData = 'http://www.omdbapi.com/?plot=full&t=' +
         name +
         '&apikey=' +
         Config.OMDB_KEY;
+*/
+    var urlMovieData = Uri(
+        scheme: 'http',
+        host: 'www.omdbapi.com',
+        queryParameters: {
+          'plot': 'full',
+          't':name,
+          'apikey':Config.OMDB_KEY
+        });
 
     print(">> omdbapi $urlMovieData");
 
@@ -324,10 +339,19 @@ class _ActionButtonsState extends State<ActionButtons> {
   }
 
   _getComplementData(String id) async {
-    var urlMovieData = 'http://www.omdbapi.com/?plot=full&i=' +
+   /* var urlMovieData = 'http://www.omdbapi.com/?plot=full&i=' +
         id +
         '&apikey=' +
-        Config.OMDB_KEY;
+        Config.OMDB_KEY;*/
+
+    var urlMovieData  = Uri(
+        scheme: 'http',
+        host: 'www.omdbapi.com',
+        queryParameters: {
+          'plot': 'full',
+          'i':id,
+          'apikey':Config.OMDB_KEY
+        });
 
     var response = await http.get(urlMovieData);
 
@@ -344,7 +368,13 @@ class _ActionButtonsState extends State<ActionButtons> {
     }
     String name;
     //barcode = "7999005920754";//"7506005920754";
-    var url = 'https://ebay-com.p.rapidapi.com/products/' + barcode;
+    //var url = 'https://ebay-com.p.rapidapi.com/products/' + barcode;
+
+    var url  = Uri(
+        scheme: 'https',
+        host: 'ebay-com.p.rapidapi.com',
+        path: 'products/'+barcode);
+
     //var response;
     var response = await http.get(
       url,
@@ -360,7 +390,11 @@ class _ActionButtonsState extends State<ActionButtons> {
     print(">>> ebay  $jsonVar");
 
     if (response.statusCode != 200) {
-      response = await http.get('https://barcode.monster/api/' + barcode);
+      var url  = Uri(
+          scheme: 'https',
+          host: 'barcode.monster',
+          path: 'api/'+barcode);
+      response = await http.get(url);//'https://barcode.monster/api/' + barcode);
       jsonVar = jsonDecode(response.body);
 
       print('Response status: ${response.statusCode}');
