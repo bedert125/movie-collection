@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:math';
 
+import 'package:share/share.dart';
 import 'package:flutter/material.dart';
 import 'package:movie_collection/collection_card_view.dart';
 import 'package:movie_collection/goto.dart';
@@ -77,7 +78,7 @@ class _HomeViewState extends State<HomeView> with TickerProviderStateMixin {
 
   _isValidSeach(newSearchText) {
     print(
-        "_isSearching $_isSearching Empty:${newSearchText.isEmpty} val:-${newSearchText}-");
+        "_isSearching $_isSearching Empty:${newSearchText.isEmpty} val:-$newSearchText-");
     return (newSearchText.isNotEmpty &&
         newSearchText != "" &&
         newSearchText != lastSearch);
@@ -110,10 +111,7 @@ class _HomeViewState extends State<HomeView> with TickerProviderStateMixin {
   }
 
 
-
-  _exportAll() async {
-    final overlay = LoadingOverlay.of(context);
-    overlay.show();
+  _oldExport() async{
     var export = ExportData();
     var items = await _db.item.getToExport(0, -1, allTranslations: true);
     var itemsDataToExport = {};
@@ -133,10 +131,29 @@ class _HomeViewState extends State<HomeView> with TickerProviderStateMixin {
     await export.add("_langs", langs);
 
     await export.writeExternalStorage();
+  }
+
+  _export() async{
+    var export = ExportData();
+    String dbFile = await _db.export();
+
+    Share.shareFiles([dbFile], text: 'Save Your Database');
+
+    export.writeDbExternalStorage(dbFile);
+
+  }
+
+  _exportAll() async {
+    final overlay = LoadingOverlay.of(context);
+    overlay.show();
+
+    //await _oldExport();
+
+    await _export();
 
     overlay.hide();
 
-    Popup.info(context, "Export", 'Data was saved locally.');
+    Popup.info(context, "Export", "ok");
   }
 
   _tools() {

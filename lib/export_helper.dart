@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:ext_storage/ext_storage.dart';
+import 'package:flutter/services.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:permission_handler/permission_handler.dart';
 
@@ -72,6 +73,36 @@ class ExportData {
 
   Future add(String key, dynamic value) async {
     _jsonLocal.addAll({key: value});
+  }
+
+  Future writeDbExternalStorage(String _file) async {
+    final downloadFileName = "MovieCollection_${DateTime.now().millisecondsSinceEpoch}.db";
+    final dir = await _getDownloadDirectory();
+    final isPermissionStatusGranted = await _requestPermissions();
+
+    if (isPermissionStatusGranted) {
+
+      //final dirList = await _getExternalStoragePath();
+      //final path = dirList[0].path;
+
+      print("load ${_file}");
+
+      final file = File('${dir.path}/$downloadFileName');
+
+      final jsonString = jsonEncode(_jsonLocal);
+      ByteData data = await rootBundle.load(_file);
+      List<int> bytes = data.buffer.asUint8List(data.offsetInBytes, data.lengthInBytes);
+      //print(jsonString);
+      file.writeAsBytesSync(bytes);
+
+      print("saved in ${file.path}");
+
+     /* file.writeAsString(jsonString).then((File _file) {
+        _fileFullPath = _file.path;
+
+        print("saved in $_fileFullPath");
+      });*/
+    }
   }
 
 

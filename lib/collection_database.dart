@@ -40,6 +40,13 @@ class ConnectionDB {
     FORMAT_KEYS[val] = key;
   });*/
 
+  _getDataBasePath() async{
+    var path=  await getDatabasesPath();
+    var fullPath =  join(path, 'collection_database.db');
+    print("loading DB $fullPath" );
+    return fullPath;
+  }
+
   var item = tableItems();
 
   _base(db) async {
@@ -282,7 +289,7 @@ class ConnectionDB {
   start() async {
     if (_db == null) {
       _db = openDatabase(
-        join(await getDatabasesPath(), 'collection_database.db'),
+        await _getDataBasePath(),
         onCreate: (db, version) async {
           print("---------- creating DB --------");
 
@@ -329,6 +336,12 @@ class ConnectionDB {
       }
       print("---------- LOADED DB --------");
     }
+  }
+
+  export() async{
+    var fullPath = await _getDataBasePath();
+
+    return fullPath;
   }
 }
 
