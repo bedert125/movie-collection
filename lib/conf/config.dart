@@ -6,7 +6,9 @@ class Config {
     print("setLocalPreferences");
     _prefs = prefs;
 
-    _ORDER_BY = prefs.getString('ORDER_BY') ?? "";
+    print(prefs.toString());
+
+    _ORDER_BY = prefs.getString('ORDER_BY') ?? "id asc";
     _VIEW = prefs.getString('VIEW') ?? "L";
     _LANG = int.parse(prefs.getString('LANG') ?? "1");
     _IMDB_API_KEY = prefs.getString('IMDB_API_KEY') ?? null;
