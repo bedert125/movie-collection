@@ -9,7 +9,8 @@ class Strings {
   static const nameToSearchInput = 'Movie Name';
   static const nameToSearchExample = 'eg. Harry Potter';
   static const itemSelectionTitle = 'Pick an option';
-  static const exportIconText = 'Export movies';
+  static const exportIconText = 'Export movies to...';
+  static const backupIconText = 'Backup movies';
   static const importIconText = 'Import movies';
   static const backupTitle = 'Backup';
 

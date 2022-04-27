@@ -2,6 +2,8 @@ import 'dart:async';
 import 'dart:math';
 
 import 'package:share/share.dart';
+
+//import 'package:file_picker_cross/file_picker_cross.dart';
 import 'package:flutter/material.dart';
 import 'package:movie_collection/collection_card_view.dart';
 import 'package:movie_collection/goto.dart';
@@ -133,27 +135,48 @@ class _HomeViewState extends State<HomeView> with TickerProviderStateMixin {
     await export.writeExternalStorage();
   }
 
-  _export() async{
-    var export = ExportData();
-    String dbFile = await _db.export();
 
-    Share.shareFiles([dbFile], text: 'Save Your Database');
-
-    export.writeDbExternalStorage(dbFile);
-
-  }
 
   _exportAll() async {
     final overlay = LoadingOverlay.of(context);
     overlay.show();
+    String dbFile = await _db.export();
+    await Share.shareFiles([dbFile], text: 'Save Your Database');
+    overlay.hide();
 
-    //await _oldExport();
+    Popup.info(context, "Export", "Keep your data in a safety place");
+  }
 
-    await _export();
+  _saveAll() async {
+    final overlay = LoadingOverlay.of(context);
+    overlay.show();
+
+    String dbFile = await _db.export();
+    var export = ExportData();
+    String path = await export.writeDbExternalStorage(dbFile);
 
     overlay.hide();
 
-    Popup.info(context, "Export", "ok");
+    if(path != ""){
+      Popup.info(context, "Export", "Your data was saved on Downloads $path");
+    }else{
+      Popup.error(context, "Export", "Data can not be saved");
+    }
+
+  }
+
+  _importAll () async{
+    String dbFile = await _db.export();
+    var export = ExportData();
+    var resutl = await export.importDb(dbFile);
+
+    if(resutl != ""){
+      Popup.info(context, "Import", "Your data was loaded");
+    }
+   /* FilePickerCross myFile = await FilePickerCross.importFromStorage(
+        type: FileTypeCross.custom,       // Available: `any`, `audio`, `image`, `video`, `custom`. Note: not available using FDE
+        fileExtension: 'bd'     // Only if FileTypeCross.custom . May be any file extension like `dot`, `ppt,pptx,odp`
+    );*/
   }
 
   _tools() {
@@ -331,8 +354,13 @@ class _HomeViewState extends State<HomeView> with TickerProviderStateMixin {
           leading: Icon(Icons.save, color: Theme.of(context).accentColor),
         ),
         ListTile(
+          title: Text(Strings.backupIconText),
+          onTap: _saveAll,
+          leading: Icon(Icons.save, color: Theme.of(context).accentColor),
+        ),
+        ListTile(
           title: Text(Strings.importIconText),
-          //onTap: _exportAll,
+          onTap: _importAll,
           leading: Icon(Icons.restore, color: Theme.of(context).accentColor),
         ),
         Divider(
