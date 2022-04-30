@@ -47,7 +47,7 @@ class _PagedCollectionListViewState extends PagedViewState{
           size: 14.0,
         ),
         onTap: () {
-          //goToItemViewById(item.id);
+          goToItemViewById(item.id);
         },
         leading: Text((index + 1).toString()),
       ),

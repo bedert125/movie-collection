@@ -5,7 +5,9 @@ import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
 
 import 'collection_database.dart';
 import 'conf/list_preferences.dart';
+import 'goto.dart';
 import 'item_data.dart';
+import 'loading_overlay.dart';
 
 
 // 1
@@ -98,6 +100,22 @@ class PagedViewState extends State<PagedView>{
     pagingController.dispose();
     super.dispose();
   }
+
+  goToItemViewById(int id) async {
+    final overlay = LoadingOverlay.of(context);
+    overlay.show();
+    ItemData item = await widget.repository.item.getById(id);
+    overlay.hide();
+    var reason = await GoTo.ItemDataView(context, item);
+    print("return home view $reason");
+
+    /* if(reason == "delete"){
+      setReset(true);
+    }
+
+     */
+  }
+
 
   Widget getWrapperPanel(){
     return RefreshIndicator(

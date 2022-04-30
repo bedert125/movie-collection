@@ -163,7 +163,7 @@ class _PagedCollectionCardViewState extends PagedViewState{
                         color: Colors.transparent,
                         child: new InkWell(
                           onTap: () {
-                            //goToItemViewById(item.id);
+                            goToItemViewById(item.id);
                           },
                         ))),
               ],
