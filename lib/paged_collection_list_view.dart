@@ -2,11 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
 import 'package:movie_collection/paged_view.dart';
 
-
-import 'collection_card_view.dart';
 import 'collection_database.dart';
-import 'collection_list_view.dart';
 import 'conf/list_preferences.dart';
+import 'conf/styles.dart';
+import 'item_data.dart';
 
 class PagedCollectionListView extends PagedView{
   const PagedCollectionListView(ConnectionDB repository,ListPreferences listPreferences)
@@ -22,12 +21,45 @@ class PagedCollectionListView extends PagedView{
 
 class _PagedCollectionListViewState extends PagedViewState{
 
+  Widget _buildItem(ItemData item, int index) {
+    var iconSetup = item.getIcon();
+    // print("row ${item.id} ${item.name} ");
+    var name = item.name;
+    if (name == null) {
+      name = "-----";
+    }
+
+    return Column(children: <Widget>[
+      ListTile(
+        title: Text(
+          name,
+          style: Styles.itemText,
+        ),
+        /*trailing: IconButton(
+        icon: iconSetup[0],
+        color: iconSetup[1],
+        onPressed: () {
+          setState(item.onTapFav);
+        },
+      ),*/
+        trailing: Icon(
+          Icons.arrow_forward_ios,
+          size: 14.0,
+        ),
+        onTap: () {
+          //goToItemViewById(item.id);
+        },
+        leading: Text((index + 1).toString()),
+      ),
+      Divider(
+        height: 5.0,
+      ),
+    ]);
+  }
+
   @override
   Widget createItem(item, int index){
-    return CollectionListView(
-      item: item,
-      index: index,
-    );
+    return _buildItem(item,index );
   }
 
   @override

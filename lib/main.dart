@@ -1,7 +1,6 @@
 
 import 'package:flutter/material.dart';
 
-import 'collection_list_view.dart';
 import 'home_view.dart';
 import 'splash_screen.dart';
 import 'conf/strings.dart';

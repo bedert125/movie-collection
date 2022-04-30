@@ -3,17 +3,13 @@ import 'dart:math';
 
 import 'package:movie_collection/paged_collection_card_view.dart';
 import 'package:movie_collection/paged_collection_list_view.dart';
-import 'package:movie_collection/paged_view.dart';
 import 'package:share/share.dart';
 
-//import 'package:file_picker_cross/file_picker_cross.dart';
 import 'package:flutter/material.dart';
-import 'package:movie_collection/collection_card_view_.dart';
 import 'package:movie_collection/goto.dart';
 
 import 'action_buttons.dart';
 import 'collection_database.dart';
-import 'collection_list_view.dart';
 import 'conf/config.dart';
 import 'conf/list_preferences.dart';
 import 'utils/dropdownBase.dart';
@@ -455,13 +451,12 @@ class _HomeViewState extends State<HomeView> with TickerProviderStateMixin {
       print("---LOADING");
       collectionView = Center(child: CircularProgressIndicator());
     } else {
-      // collectionView = PagedCardView(_db, _listPreferences);
-      collectionView = PagedCollectionListView(_db, _listPreferences);
-      /*if (Config.VIEW == "L") {
-        collectionView = CollectionListView();//(toReset: resetListView);
+
+      if (Config.VIEW == "L") {
+        collectionView = PagedCollectionListView(_db, _listPreferences);
       } else {
-        collectionView = CollectionCardView();// (toReset: resetListView);
-      }*/
+        collectionView = PagedCollectionCardView(_db, _listPreferences);
+      }
     }
 
     return Scaffold(

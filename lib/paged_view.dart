@@ -2,10 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
 
 
-import 'collection_card_view.dart';
+
 import 'collection_database.dart';
-import 'collection_list_view.dart';
-import 'conf/config.dart';
 import 'conf/list_preferences.dart';
 import 'item_data.dart';
 
