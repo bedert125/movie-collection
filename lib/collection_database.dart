@@ -370,11 +370,17 @@ class tableItems {
   }
 
 
-  _getDynamicItemsQuery(int _lang, String _order, {String search= ""}){
+  _getDynamicItemsQuery(int _lang, String _order, {String search= "", int start= -1, int size= -1}){
 
     String where ="";
     if(search!= ""){
       where =" WHERE ${ConnectionDB.TABLE_TRANSLATED}.name  COLLATE SQL_Latin1_General_CP1_CI_AI LIKE  \"%$search%\" ";
+    }
+
+    String pagination="";
+    if(start!= -1 && size!=-1){
+      pagination = " limit $size offset $start";
+      //ORDER BY $orderBy limit $max offset $start'
     }
 
     String query = "SELECT id,year,name,${ConnectionDB.FK_LANG_ID} FROM ( "
@@ -397,7 +403,8 @@ class tableItems {
         "ORDER BY ${ConnectionDB.TABLE_ITEMS}.id, langOrder DESC"
         ") AS t "
         "GROUP BY t.id "
-        "ORDER BY $_order";
+        "ORDER BY $_order"
+        " $pagination";
 
     return query;
   }
@@ -523,6 +530,35 @@ class tableItems {
     return toReturn;
   }
 
+  Future<List<ItemData>> getPage(int number,int size) async{
+
+    List<ItemData> toReturn = [];
+
+    var orderBy = Config.ORDER_BY;
+    var lang = Config.LANG;
+    var search = Config.SEARCH;
+    var start = number * size;
+
+    var query =  _getDynamicItemsQuery(lang, orderBy, search: search, start: start, size: size);
+    print("query $query");
+
+    final Database db = await ConnectionDB._db;
+
+    final List<Map<String, dynamic>> items = await db.rawQuery(query);
+
+    for(var i=0;i<items.length;i++){
+      var item =items[i];
+      var currentLang = item[ConnectionDB.FK_LANG_ID];
+      // print(item);
+      //print("------ ${item["id"]} ${item[ConnectionDB.FK_LANG_ID]}  ${item["name"]} ");
+      ItemData itemData = await getById(item["id"], lang: currentLang);
+      toReturn.add(itemData);
+    }
+
+
+    return toReturn;
+  }
+
   Future<List<ItemData>> getAllAsList() async{
 
     List<ItemData> toReturn = [];
@@ -533,6 +569,7 @@ class tableItems {
 
     var query =  _getDynamicItemsQuery(lang, orderBy, search: search);
     print("query $query");
+
 
     final Database db = await ConnectionDB._db;
 

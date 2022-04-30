@@ -2,8 +2,10 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:movie_collection/conf/config.dart';
+import 'package:movie_collection/paged_view.dart';
 
 import 'collection_database.dart';
+import 'conf/list_preferences.dart';
 import 'goto.dart';
 import 'item_data.dart';
 import 'loading_overlay.dart';
@@ -11,13 +13,19 @@ import 'loading_overlay.dart';
 class CollectionView extends StatefulWidget {
 
   // bool toReset = false;
-  getState(){
+/*  getState(){
     print("get state base ");
     return CollectionViewState();
-  }
+  }]*/
+
+  const CollectionView({
+    this.item
+  });
+
+  final ItemData item;
 
   @override
-  CollectionViewState createState() => getState(); //_CollectionViewState();
+  CollectionViewState createState() => CollectionViewState(); //_CollectionViewState();
 }
 
 
@@ -27,6 +35,8 @@ class CollectionView extends StatefulWidget {
 class CollectionViewState extends State<CollectionView> {
 
   //bool toReset = false;
+  ListPreferences _listPreferences;
+  int conuntReset =0;
 
   final List<ItemData> itemList = [];
   ConnectionDB _db;
@@ -38,6 +48,21 @@ class CollectionViewState extends State<CollectionView> {
   }
 
   _asyncView() {
+    var _toReset = shouldBeUpdated();
+    if (_toReset) {
+      conuntReset++;
+      setState(() {
+        _listPreferences = ListPreferences(
+            sortBy: ">> $conuntReset"
+        );
+      });
+    }
+
+    return PagedView(
+
+      listPreferences: _listPreferences,
+    );
+/*
     var _toReset = shouldBeUpdated();
     print("_asyncView -------- common ${_toReset}");
     var waitDone = false;
@@ -63,6 +88,8 @@ class CollectionViewState extends State<CollectionView> {
         }
       },
     );
+
+    */
   }
 
   Future<List<ItemData>> _getDataList(bool getDataFromBD) async {

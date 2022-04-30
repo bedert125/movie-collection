@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import 'conf/list_preferences.dart';
 import 'dialog_box.dart';
 import 'conf/strings.dart';
 
@@ -34,7 +35,12 @@ class Popup {
   static Future confirmation(BuildContext context, String title, String message) async{
 
     var actions = _getOkCancelBtn(context, () {
-      Navigator.of(context).pop(true);
+
+      Navigator.of(context).pop(
+          ListPreferences(
+              sortBy: " > $title"
+          )
+      );
     });
 
     return await showDialog(

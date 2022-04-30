@@ -2,8 +2,6 @@ import 'dart:ui';
 
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter/material.dart';
 import 'package:movie_collection/utils/visualElements.dart';
 
 import 'collection_common_view.dart';
@@ -12,32 +10,46 @@ import 'conf/config.dart';
 import 'conf/styles.dart';
 import 'item_data.dart';
 
-class CollectionCardView extends StatefulWidget {
-  final ItemData item;
-  final int index;
+class CollectionCardView extends CollectionView {
+  /* CollectionCardView({toReset}) {
+    toReset = toReset ?? false;
+    Config.NEEDS_UPDATE = toReset;
+    print("restarting ${toReset}");
+    // this.toReset = toReset;
+    //print("restarting ${this.toReset}");
+  }
 
-  const CollectionCardView({
-    @required this.item,
-    @required this.index
-  });
-
+   */
 
   @override
-  _CollectionCardViewState createState() => _CollectionCardViewState();
+  getState() {
+    return _CollectionCardViewState();
+  }
 }
 
-
-class _CollectionCardViewState extends State<CollectionCardView> {
-
-  @override
-  Widget build(BuildContext context) {
-    return _buildCard(widget.item);
-  }
+class _CollectionCardViewState extends CollectionViewState {
 
   var borderColor = Colors.blueGrey;
   Radius roundBorder =  Radius.circular(10);
 
 
+  @override
+  Widget buildCollectionList() {
+    return GridView.builder(
+        primary: true,
+        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+          crossAxisCount: 2, //(orientation == Orientation.portrait) ? 2 : 3,
+          childAspectRatio: 2 / 3,
+        ),
+        itemCount: itemList.length,
+        itemBuilder: (BuildContext context, int index) {
+          if (itemList.length == index) {
+            return Container();
+          } else {
+            return _buildCard(itemList[index], index);
+          }
+        });
+  }
 
   Widget _getIcons(item) {
     List<Widget> icons = [];
@@ -72,7 +84,7 @@ class _CollectionCardViewState extends State<CollectionCardView> {
     return Column(children: icons);
   }
 
-  Card _buildCard(ItemData item) {
+  Card _buildCard(ItemData item, int pos) {
     print("card ${item.name}");
     return Card(
         borderOnForeground: true,
@@ -169,7 +181,7 @@ class _CollectionCardViewState extends State<CollectionCardView> {
                         color: Colors.transparent,
                         child: new InkWell(
                           onTap: () {
-                            //goToItemViewById(item.id);
+                            goToItemViewById(item.id);
                           },
                         ))),
               ],

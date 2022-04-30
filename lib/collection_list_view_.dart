@@ -7,30 +7,43 @@ import 'conf/styles.dart';
 import 'item_data.dart';
 
 
-class CollectionListView extends StatefulWidget {
-  final ItemData item;
-  final int index;
+class CollectionListView extends CollectionView {
+  //var rng = new Random();
 
-  const CollectionListView({
-    @required this.item,
-    @required this.index
-  });
-
+  /* CollectionListView({toReset}){
+    toReset = toReset ?? false;
+    Config.NEEDS_UPDATE = toReset;
+    print("restarting ${toReset}");
+  }*/
 
   @override
-  _CollectionListViewState createState() => _CollectionListViewState();
+  getState(){
+    print("get state override LIST ");
+    return _CollectionListViewState();
+  }
+
 }
 
 // usar implemet ??? o extend
-class _CollectionListViewState extends State<CollectionListView>{
+class _CollectionListViewState extends CollectionViewState{
 
   _CollectionListViewState(){
     print("restart stae   _CollectionListViewState");
   }
 
   @override
-  Widget build(BuildContext context) {
-    return _buildRow(widget.item, widget.index);
+  Widget buildCollectionList() {
+
+    return ListView.builder(
+        shrinkWrap: true,
+        // itemCount: _itemList.length,
+        itemBuilder: (context, i) {
+          if (itemList.length == i) {
+            return null;
+          } else {
+            return _buildRow(itemList[i], i);
+          }
+        });
   }
 
   Widget _buildRow(ItemData item, int index) {
@@ -59,7 +72,7 @@ class _CollectionListViewState extends State<CollectionListView>{
           size: 14.0,
         ),
         onTap: () {
-          //goToItemViewById(item.id);
+          goToItemViewById(item.id);
         },
         leading: Text((index + 1).toString()),
       ),

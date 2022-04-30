@@ -1,17 +1,21 @@
 import 'dart:async';
 import 'dart:math';
 
+import 'package:movie_collection/paged_collection_card_view.dart';
+import 'package:movie_collection/paged_collection_list_view.dart';
+import 'package:movie_collection/paged_view.dart';
 import 'package:share/share.dart';
 
 //import 'package:file_picker_cross/file_picker_cross.dart';
 import 'package:flutter/material.dart';
-import 'package:movie_collection/collection_card_view.dart';
+import 'package:movie_collection/collection_card_view_.dart';
 import 'package:movie_collection/goto.dart';
 
 import 'action_buttons.dart';
 import 'collection_database.dart';
 import 'collection_list_view.dart';
 import 'conf/config.dart';
+import 'conf/list_preferences.dart';
 import 'utils/dropdownBase.dart';
 import 'conf/strings.dart';
 import 'conf/styles.dart';
@@ -30,7 +34,11 @@ class HomeView extends StatefulWidget {
 
 class _HomeViewState extends State<HomeView> with TickerProviderStateMixin {
 
-
+  ListPreferences _listPreferences = ListPreferences(
+    sortBy: Config.ORDER_BY,
+    viewType: Config.VIEW,
+    search: Config.SEARCH
+  );
   var _controller, _iconToolController, _arrowAnimation;
 
   // var _toolPanelcontroller;
@@ -67,6 +75,20 @@ class _HomeViewState extends State<HomeView> with TickerProviderStateMixin {
   Icon actionIcon = new Icon(Icons.search);
 
   var lastSearch = "";
+
+  _updatePeferences() {
+
+   if(Config.SEARCH != _listPreferences.search ||
+      Config.VIEW != _listPreferences.viewType ||
+      Config.ORDER_BY != _listPreferences.sortBy){
+     _listPreferences = ListPreferences(
+         sortBy: Config.ORDER_BY,
+         viewType: Config.VIEW,
+         search: Config.SEARCH
+     );
+   }
+
+  }
 
   _setNewSearch(String newSearch) {
     print("_isNewSearch -$newSearch-");
@@ -287,6 +309,7 @@ class _HomeViewState extends State<HomeView> with TickerProviderStateMixin {
         _iconToolController.reverse();
         //_toolPanelcontroller.reverse();
       }
+      _updatePeferences();
     });
   }
 
@@ -427,16 +450,18 @@ class _HomeViewState extends State<HomeView> with TickerProviderStateMixin {
   Widget build(BuildContext context) {
     //print(">>>> build Home reset  $resetListView");
     var collectionView;
-
+    _updatePeferences();
     if (_isSearching > 0) {
       print("---LOADING");
       collectionView = Center(child: CircularProgressIndicator());
     } else {
-      if (Config.VIEW == "L") {
+      // collectionView = PagedCardView(_db, _listPreferences);
+      collectionView = PagedCollectionListView(_db, _listPreferences);
+      /*if (Config.VIEW == "L") {
         collectionView = CollectionListView();//(toReset: resetListView);
       } else {
         collectionView = CollectionCardView();// (toReset: resetListView);
-      }
+      }*/
     }
 
     return Scaffold(
