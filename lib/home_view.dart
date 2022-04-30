@@ -33,7 +33,8 @@ class _HomeViewState extends State<HomeView> with TickerProviderStateMixin {
   ListPreferences _listPreferences = ListPreferences(
     sortBy: Config.ORDER_BY,
     viewType: Config.VIEW,
-    search: Config.SEARCH
+    search: Config.SEARCH,
+      dbModification: Config.dbModification
   );
   var _controller, _iconToolController, _arrowAnimation;
 
@@ -76,11 +77,13 @@ class _HomeViewState extends State<HomeView> with TickerProviderStateMixin {
 
    if(Config.SEARCH != _listPreferences.search ||
       Config.VIEW != _listPreferences.viewType ||
+       Config.dbModification != _listPreferences.dbModification ||
       Config.ORDER_BY != _listPreferences.sortBy){
      _listPreferences = ListPreferences(
          sortBy: Config.ORDER_BY,
          viewType: Config.VIEW,
-         search: Config.SEARCH
+         search: Config.SEARCH,
+         dbModification: Config.dbModification
      );
    }
 

@@ -80,4 +80,7 @@ class Config {
     _prefs.setString('E_BAY_KEY', value);
     _E_BAY_KEY = value;
   }
+
+
+  static int dbModification = 0;
 }

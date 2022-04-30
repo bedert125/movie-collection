@@ -138,6 +138,7 @@ class _ActionButtonsState extends State<ActionButtons> {
       print("----------------------------------------------- insert OK ${id}");
 
       setState(overlay.hide);
+      Config.dbModification++;
       await GoTo.ItemDataView(context, newItem);
     } else {
       setState(overlay.hide);

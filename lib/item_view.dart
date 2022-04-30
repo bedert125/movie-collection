@@ -290,6 +290,7 @@ class _ItemViewState extends State<ItemView> {
     if (confirm == true) {
       await _db.item.delete(widget._item);
       Config.NEEDS_UPDATE = true;
+      Config.dbModification++;
       Navigator.of(context).pop("delete");
     }
   }
